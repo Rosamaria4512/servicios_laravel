@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\LoginRequest;
 use App\Models\User;
+use App\Models\Token;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\RegisterRequest;
+
 
 class AuthController extends Controller
 {
@@ -34,13 +36,16 @@ class AuthController extends Controller
             ], 200);
         }
 
-        $userToken = User::where('name', $request->email)->first();
+        $userToken = Token::where('name', $request->email)->first();
+        $user =User::where('email',$request->email)->first();
         if ($userToken) {
             $userToken->delete();
         }
         return response()->json([
             'success' => true,
             'token' => $request->user()->createToken($request->email)->plainTextToken,
+            'id'=>$user->id,
+            'nombre'=>$user->name,
             'message' => 'Inicio de sesion satisfactorio',
         ], 200);
     }
@@ -49,9 +54,9 @@ class AuthController extends Controller
     {
         $request->user()->currentAccessToken()->delete();
         return response()->json([
-            'message' => 'Token eliminado correctamente',
+            'message' => 'cerrando sesion de usuario',
         ], 410);
     }
-    
+
 }
 
