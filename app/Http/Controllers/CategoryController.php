@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use GrahamCampbell\ResultType\Success;
 use Illuminate\Http\Request;
 
 class CategoryController extends Controller
@@ -56,7 +57,15 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $category = Category::find($id);
+        $category->nombre=$request->nombre;
+        $category->save();
+
+        return response()->json([
+            'message'=> 'Success',
+            'info'=> 'categoria actulizada',
+            'categoria'=>$category,
+        ],201);
     }
 
     /**

@@ -35,7 +35,14 @@ class PayController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $pay = new Pay();
+        $pay->metodo_pago =$request->metodo_pago;
+        $pay->save();
+        return response()->json([
+            'message'=> 'Success',
+            'info'=> 'pago creado',
+            'metodo_pago'=>$pay,
+        ],201);
     }
 
     /**
